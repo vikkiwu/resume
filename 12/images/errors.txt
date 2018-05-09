@@ -1,0 +1,1 @@
+[2018-05-09 18:23:19] layer "Avatar photo.png": Duplicate path: Avatar photo.png
