@@ -1,28 +1,83 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta http-equiv="content-type" content="text/html; charset=gb2312"/>
     <meta charset="UTF-8">    
     <title>IFE ECMAScript</title>
+    <style>
+        select {
+            display: none;
+        }
+        div {
+            margin: 20px;
+        }
+    </style>
 </head>
-<body>        
-    <input id="name" type="text" onkeypress="test2()">    
-    <button id="submit-btn" onclick="test1()">Submit</button>
 
-    <script>
-        function test1(){
-           console.log(name);
+<body>
+    <div>
+        <!--任务一-->        
+        <input id="name" type="text">    
+        <button id="submit-btn">Submit</button>
+    </div>
+
+    <div>
+        <!--任务二--> 
+        <label>
+        <input id="school" name="status" type="radio">School
+        </label>
+        <label>
+        <input id="company" name="status" type="radio">Company
+        </label>
+    
+        <select id="school-select">        
+            <option>北京邮电大学</option>
+            <option>黑龙江大学</option>
+            <option>华中科技大学</option>
+        </select>
+    
+        <select id="company-select">        
+            <option>百度</option>
+            <option>爱奇艺</option>        
+        </select>
+    </div>
+
+    <script type="text/javascript">
+    //任务一 
+        (function () {
+            var btn = document.getElementById('submit-btn'),
+            input = document.getElementById('name');
+
+            function consoleName() {
+            console.log(input.value);
         }
-        function test2(){
-            var myEvent = window.event;
-            var keyCode = myEvent.keyCode;
-            if(keyCode == 13){
-                console.log(name);
+
+        btn.onclick = consoleName;
+        input.onkeyup = function (e) {
+            var key = e.keyCode;
+            if (key === 13) {
+                consoleName();
+                } else if (key === 27) {
+                input.value = '';
+            } 
+        };
+        })();
+
+    //任务二
+        (function (){
+            function showSelect(id) {
+                var radio = document.getElementById(id);
+                var target = document.getElementById(id + '-select');
+                radio.onclick=function(){
+                    var select = document.getElementsByTagName('select');
+                    for (var i = 0, len = select.length; i < len; i++) {
+                        select[i].style.display = 'none';
+                    }
+                    target.style.display = 'block';
+                }
             }
-            else if(keyCode == 27){
-                console.log(name);
-            }
-        }
+            showSelect('school');
+            showSelect('company');
+        })();
     </script>
 </body>
 </html>
