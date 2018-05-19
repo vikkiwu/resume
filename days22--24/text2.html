@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>days22--24</title>
+    </head>
+    <body>
+        <div>
+            <label>String A:
+                <input id="radio-a" type="radio" checked="true" name="str-obj" value="a">
+            </label>
+            <textarea id="str-a"></textarea>
+
+            <label>String B:
+                <input id="radio-b" type="radio" name="str-obj" value="b">
+            </label>
+            <textarea id="str-b"></textarea>
+
+            <label>Num A：<input id="num-a" type="number" value="0"></label>
+            <label>Num B：<input id="num-b" type="number" value="1"></label>
+        </div>
+        <div>
+            <button onclick="btn01()">获取当前选中输入的内容长度</button>
+            <button onclick="btn02()">当前选中输入中的第3个字符</button>
+            <button onclick="btn03()">把两个输入框的文字连接在一起输出（concat）</button>
+            <button onclick="btn04()">输入B中的内容，在输入A的内容中第一次出现的位置（indexOf）</button>
+            <button onclick="btn05()">输入A中的内容，在输入B的内容中最后一次出现的位置（lastIndexOf）</button>
+            <button onclick="btn06()">使用slice获取选中输入框内容的部分内容，参数为num-a及num-b</button>
+            <button onclick="btn07()">当前选中输入框的行数</button>
+            <button onclick="btn08()">使用substr获取选中输入框内容的子字符串，参数为num-a及num-b</button>
+            <button onclick="btn09()">把所选输入框中的内容全部转为大写</button>
+            <button onclick="btn10()">把所选输入框中的内容全部转为小写</button>
+            <button onclick="btn11()">把所选输入框中内容的半角空格全部去除</button>
+            <button onclick="btn12()">把所选输入框中内容的a全部替换成另外一个输入框中的内容</button>
+        </div>
+        <p id="result"></p>
+
+        <script>
+        function btn01(){
+            var input = document.getElementsByName('str-obj');
+            var sa = document.getElementById("str-a").value;
+            var sb = document.getElementById("str-b").value;
+            for(var i = 0; i <= input.length; i++){
+                if(input[i].checked == true){
+                    if(input[i].value == "a"){
+                        document.getElementById("result").innerHTML=sa.length;
+                    }
+                    else{
+                        document.getElementById("result").innerHTML=sb.length;
+                    }
+                }
+            }
+        }
+
+        function btn02(){
+            var input = document.getElementsByName('str-obj');
+            var sa = document.getElementById("str-a").value;
+            var sb = document.getElementById("str-b").value;
+            for(var i = 0; i <= input.length; i++){
+                if(input[i].checked == true){
+                    if(input[i].value == "a"){
+                        document.getElementById("result").innerHTML=sa[2];
+                    }
+                    else{
+                        document.getElementById("result").innerHTML=sb[2];
+                    }
+                }
+            }
+        }
+
+        //把两个输入框的文字连接在一起输出（concat）
+        function btn03(){
+            var input = document.getElementsByName('str-obj');
+            var sa = document.getElementById("str-a").value;
+            var sb = document.getElementById("str-b").value;
+            document.getElementById("result").innerHTML = sa.concat(sb);
+        }
+
+        //输入B中的内容，在输入A的内容中第一次出现的位置（indexOf）
+        function btn04(){
+            var input = document.getElementsByName('str-obj');
+            var sa = document.getElementById("str-a").value;
+            var sb = document.getElementById("str-b").value;
+            document.getElementById("result").innerHTML = sa.indexOf(sb);
+        }
+
+        //输入A中的内容，在输入B的内容中最后一次出现的位置（lastIndexOf）
+        function btn05(){
+            var input = document.getElementsByName('str-obj');
+            var sa = document.getElementById("str-a").value;
+            var sb = document.getElementById("str-b").value;
+            document.getElementById("result").innerHTML = sb.lastIndexOf(sa);
+        }
+
+        //使用slice获取选中输入框内容的部分内容，参数为num-a及num-b
+        function btn06(){
+            var input = document.getElementsByName('str-obj');
+            var sa = document.getElementById("str-a").value;
+            var sb = document.getElementById("str-b").value;
+            var na = document.getElementById("num-a").value;
+            var nb = document.getElementById("num-b").value;
+            for(var i = 0; i <= input.length; i++){
+                if(input[i].checked == true){
+                    if(input[i].value == "a"){
+                        document.getElementById("result").innerHTML=sa.slice(na,nb);
+                    }
+                    else{
+                        document.getElementById("result").innerHTML=sb.slice(na,nb);
+                    }
+                }
+            }
+        }
+
+        //当前选中输入框的行数
+        function btn07(){
+            var input = document.getElementsByName('str-obj');
+            var sa = document.getElementById("str-a").value;
+            var sb = document.getElementById("str-b").value;
+            for(var i = 0; i <= input.length; i++){
+                if(input[i].checked == true){
+                    if(input[i].value == "a"){
+                        document.getElementById("result").innerHTML=sa.split(/\r?\n|\r/).length;
+                    }
+                    else{
+                        document.getElementById("result").innerHTML=sb.split(/\r?\n|\r/).length;
+                    }
+                }
+            }
+        }
+
+        //使用substr获取选中输入框内容的子字符串，参数为num-a及num-b
+        function btn08(){
+            var input = document.getElementsByName('str-obj');
+            var sa = document.getElementById("str-a").value;
+            var sb = document.getElementById("str-b").value;
+            var na = document.getElementById("num-a").value;
+            var nb = document.getElementById("num-b").value;
+            for(var i = 0; i <= input.length; i++){
+                if(input[i].checked == true){
+                    if(input[i].value == "a"){
+                        document.getElementById("result").innerHTML=sa.substr(na,nb);
+                    }
+                    else{
+                        document.getElementById("result").innerHTML=sb.substr(na,nb);
+                    }
+                }
+            }
+        }
+
+        //把所选输入框中的内容全部转为大写
+        function btn09(){
+            var input = document.getElementsByName('str-obj');
+            var sa = document.getElementById("str-a").value;
+            var sb = document.getElementById("str-b").value;
+            for(var i = 0; i <= input.length; i++){
+                if(input[i].checked == true){
+                    if(input[i].value == "a"){
+                        document.getElementById("result").innerHTML=sa.toLocaleUpperCase();
+                    }
+                    else{
+                        document.getElementById("result").innerHTML=sb.toLocaleUpperCase();
+                    }
+                }
+            }
+        }
+
+        //把所选输入框中的内容全部转为小写
+        function btn10(){
+            var input = document.getElementsByName('str-obj');
+            var sa = document.getElementById("str-a").value;
+            var sb = document.getElementById("str-b").value;
+            for(var i = 0; i <= input.length; i++){
+                if(input[i].checked == true){
+                    if(input[i].value == "a"){
+                        document.getElementById("result").innerHTML=sa.toLocaleLowerCase();
+                    }
+                    else{
+                        document.getElementById("result").innerHTML=sb.toLocaleLowerCase();
+                    }
+                }
+            }
+        }
+
+        //把所选输入框中内容的半角空格全部去除
+        function btn11(){
+            var input = document.getElementsByName('str-obj');
+            var sa = document.getElementById("str-a").value;
+            var sb = document.getElementById("str-b").value;
+            for(var i = 0; i <= input.length; i++){
+                if(input[i].checked == true){
+                    if(input[i].value == "a"){
+                        sa = sa.replace(/\s+/g,"");
+                        document.getElementById("result").innerHTML=sa;
+                    }
+                    else{
+                        sb = sb.replace(/\s+/g,"");
+                        document.getElementById("result").innerHTML=sb;
+                    }
+                }
+            }
+        }
+        //把所选输入框中内容的a全部替换成另外一个输入框中的内容
+        function btn12(){
+            var input = document.getElementsByName('str-obj');
+            var sa = document.getElementById("str-a").value;
+            var sb = document.getElementById("str-b").value;
+            for(var i = 0; i <= input.length; i++){
+                if(input[i].checked == true){
+                    var a="a";
+                    if(input[i].value == "a"){
+                        document.getElementById("result").innerHTML=sa.replace(a,sb);
+                    }
+                    else{
+                        document.getElementById("result").innerHTML=sb.replace(a,sa);
+                    }
+                }
+            }
+        }
+
+        </script>
+    </body>
+</html>
