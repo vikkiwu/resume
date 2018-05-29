@@ -1,53 +1,154 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="utf-8">
-        <title>days25--27</title>
-    </head>
-    <body>
-        <select id="year-select">
-            <option value="2000">2000</option>
-            <option value="2001">2001</option>
-            <option value="2002">2002</option>
-            ……
-            <option value="2032">2002</option>
-        </select>
-        
-        <select id="month-select">
-            <option value="1">1</option>
-            <option value="2">2</option>
-            ……
-            <option value="12">12</option>
-        </select>
-        
-        <select id="day-select">
-            <option value="1">1</option>
-            <option value="2">2</option>
-            ……
-            <option value="31">31</option>
-        </select>
-        
-        <select id="hour-select">
-            <option value="0">00</option>
-            <option value="1">01</option>        
-            ……
-            <option value="23">23</option>
-        </select>
-        
-        <select id="minite-select">
-            <option value="0">0</option>
-            <option value="1">1</option>
-            ……
-            <option>59</option>
-        </select>
-        
-        <select id="second-select">
-            <option value="0">0</option>
-            <option value="1">1</option>
-            ……
-            <option>59</option>
-        </select>
-        
-        <p id="result-wrapper">现在距离 2001年1月1日星期X HH:MM:SS 还有 X 天 X 小时 X 分 X 秒</p>
-    </body>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>calendar</title>
+</head>
+
+<body>
+
+    <select id="year-select"></select>
+    <select id="month-select"></select>
+    <select id="date-select"></select>
+    <select id="hour-select"></select>
+    <select id="minite-select"></select>
+    <select id="second-select"></select>
+    <p id="result-wrapper"></p>
+
+    <script>
+        var yearSelect = document.getElementById("year-select");
+        var monthSelect = document.getElementById("month-select");
+        var dateSelect = document.getElementById("date-select");
+        var hourSelect = document.getElementById("hour-select");
+        var miniteSelect = document.getElementById("minite-select");
+        var secondSelect = document.getElementById("second-select");
+        var resultWrapper = document.getElementById("result-wrapper");
+        //添加（年月日时分秒）到下拉列表，value开始，end结束
+        function setCalendar(element, value, end) {
+            for (; value <= end; value++) {
+                value = checkTime(value);
+                var option = document.createElement("option");
+                var text = document.createTextNode(value);
+                option.appendChild(text);
+                option.setAttribute("value", value);
+                element.appendChild(option);
+            }
+        }
+        //补0
+        function checkTime(z) { 
+            if (z < 10) {
+                z = "0" + z; 
+            }
+            return z;
+        }
+        //判断是不是闰年
+        function isLeapYear(year) {
+            return (year % 100 != 0 && year % 4 == 0) || (year % 400 == 0);
+        }
+
+        // 每个月的天数
+        function setDate() {
+            switch (monthSelect.value) {
+                case "01":
+                case "03":
+                case "05":
+                case "07":
+                case "08":
+                case "10":
+                case "12":
+                    dateSelect.innerHTML = ""; 
+                    setCalendar(dateSelect, 1, 31);
+                    break;
+                case "02": //2月判断是否是闰年
+                    dateSelect.innerHTML = ""; 
+                    if (isLeapYear(yearSelect.value)) {
+                        setCalendar(dateSelect, 1, 29);
+                    } else {
+                        setCalendar(dateSelect, 1, 28);
+                    }
+                    break;
+                case "04":
+                case "06":
+                case "09":
+                case "11":
+                    dateSelect.innerHTML = ""; 
+                    setCalendar(dateSelect, 1, 30); 
+                    break;
+            }
+        }
+
+        setCalendar(yearSelect, 2000, 2032); //年
+        setCalendar(monthSelect, 1, 12); //月
+        setCalendar(dateSelect, 1, 31); //日 默认31天
+        setCalendar(hourSelect, 0, 23); //时
+        setCalendar(miniteSelect, 0, 59); //分
+        setCalendar(secondSelect, 0, 59); //秒
+
+        //页面日期时间，按照格式进行包装
+        function fatYouDate(year, month, date, day, hour, min, sec) {
+            month = checkTime(month + 1); //month从0开始
+            return year + "年" + month + "月" + date + "日 " + getWeekday(day) + hour + ":" + min + ":" + sec;
+        }
+
+        //根据某个日期返回这一天是星期几
+        function getWeekday(d) {
+            var weekday = ["星期日 ", "星期一 ", "星期二 ", "星期三 ", "星期四 ", "星期五 ", "星期六 "];
+            return weekday[d];
+        }
+
+        //年月添加监听事件，当发生改变时date跟着改变
+        yearSelect.addEventListener("change", setDate);
+        monthSelect.addEventListener("change", setDate);
+
+        //上面是日历列表初始化部分，下面是计算显示结果部分
+        function countDate() {
+            var result = "";
+
+            // 获取当前页面设置的年月日时分秒
+            var year = yearSelect.value;
+            var month = monthSelect.value - 1;
+            var date = dateSelect.value;
+            var hour = hourSelect.value;
+            var min = miniteSelect.value;
+            var sec = secondSelect.value;
+            var youDate = new Date(year, month, date, hour, min, sec); //以页面时间新建对象new Date(yyyy,mth,dd,hh,mm,ss);
+            var day = youDate.getDay(); //getDay()是当前日期在一周中的哪一天，0到6
+
+            // 获取此刻系统的年月日时分秒
+            var nowDate = new Date();
+            var nYear = nowDate.getFullYear();
+            var nMonth = nowDate.getMonth();
+            var ndate = nowDate.getDate;
+            var nHour = nowDate.getHours();
+            var nMin = nowDate.getMinutes();
+            var nSec = nowDate.getSeconds();
+
+            // 计算出相差的时间
+            var timeMinus = Math.abs(nowDate.getTime() - youDate.getTime()); //日期之间相差的毫秒数,取绝对值
+            var numDays = Math.floor(timeMinus / 86400000); // 计算天数，一天86400000毫秒
+            var remTimes = timeMinus % 86400000; //除去整天数剩余的毫秒数
+            var numHours = Math.floor(remTimes / 3600000); //计算小时数，一个小时3600000毫秒
+            var remTimes = remTimes % 3600000; //剩余毫秒数扣除整天数剩余的毫秒数
+            var numMin = Math.floor(remTimes / 60000);
+            var numSec = Math.floor(remTimes % 60000 / 1000); //计算秒数
+
+            // 判断是在系统时间之前还是之后，显示不同的结果
+            if ((nowDate.getTime() - youDate.getTime()) >= 0) {
+                result = "现在距离 " + fatYouDate(year, month, date, day, hour, min, sec) + " 已经过去" + numDays + "天" + numHours + "小时" + numMin + "分" + numSec + "秒";
+                return result;
+            } else if ((nowDate.getTime() - youDate.getTime()) < 0) {
+                result = "现在距离 " + fatYouDate(year, month, date, day, hour, min, sec) + " 还有" + numDays + "天" + numHours + "小时" + numMin + "分" + numSec + "秒";
+                return result;
+            }
+        }
+        //显示结果在p标签
+        function setResultWrapper() {
+            resultWrapper.innerHTML = countDate();
+        }
+
+        setInterval(setResultWrapper, 500);
+    </script>
+</body>
+
 </html>
