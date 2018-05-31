@@ -1,0 +1,59 @@
+<html>
+<head>
+    <meta charset="UTF-8">    
+    <title>IFE ECMAScript</title>
+    
+</head>
+<body>
+
+    <div class="wrapper">
+        <input id="email-input" type="text">
+        <ul id="email-sug-wrapper" class="email-sug"></ul>
+    </div>
+
+    <script>
+        var postfixList = ['163.com', 'gmail.com', '126.com', 'qq.com', '263.net'];
+
+        inputDom的输入监听 = function() {
+            document.getElementById("email-input").oninput = function() {get()};//获取用户输入，生成提示框中的提示内容，将提示内容添加到email-sug-wrapper中
+            控制email-sug-wrapper的显示/隐藏状态
+        }
+
+        function get() {                                            //获取用户输入
+            var trim = document.getElementById("text").value;       //拿到input输入框的输入内容trim后返回   
+            return trim; 
+        }
+
+        function tip() {                                            //生成提示框中的提示内容
+            var trip = get();//获取用户输入
+            var tipValue;
+            for(var index in postfixList) {                         //遍历postfixList
+                tipValue = tt + postfixList[index] +"\n"+ tipValue;      //把用户输入和每一个postfix进行结合成为每一个Li
+            }
+            return tipValue; //返回生成的提示内容
+        }
+
+        function  add(){                                                         //将提示内容添加到email-sug-wrapper中()
+            var tipValue=tip();
+            document.getElementById("email-sug-wrapper").innerHTML = tipValue    //将内容添加到email-sug-wrapper中
+        }
+
+        function  showAndHide(){              //控制email-sug-wrapper的显示/隐藏状态()
+            var trip = get();
+            if (trip = "") {
+                document.getElementById('email-sug-wrapper').style.display = 'none'; //隐藏提示框
+            } else {
+                document.getElementById('email-sug-wrapper').style.display = 'block'; //显示提示框
+            }
+        }
+
+        function 隐藏提示框() {
+            做具体隐藏提示框的操作
+        }
+
+        function 显示提示框() {
+            做具体显示提示框的操作
+        }
+    </script>
+</body>
+</html>
