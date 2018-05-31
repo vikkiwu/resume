@@ -1,8 +1,18 @@
 <html>
 <head>
     <meta charset="UTF-8">    
-    <title>IFE ECMAScript</title>
-    
+    <title>days28</title>
+    <style>
+        li{
+            list-style-type:none;
+            border:1px solid #aaa;
+            border-bottom-width: 0px;
+            width: 200px;
+        }
+        li:hover {
+            background-color: #f8c5ff;
+        }
+    </style>
 </head>
 <body>
 
@@ -12,47 +22,122 @@
     </div>
 
     <script>
+        var inputDom = document.getElementById("email-input");
         var postfixList = ['163.com', 'gmail.com', '126.com', 'qq.com', '263.net'];
 
-        inputDom的输入监听 = function() {
-            document.getElementById("email-input").oninput = function() {get()};//获取用户输入，生成提示框中的提示内容，将提示内容添加到email-sug-wrapper中
-            控制email-sug-wrapper的显示/隐藏状态
+                inputDom.focus();
+        // 增加一个变量，用于存储当前选中的提示Li的序号
+        var nowSelectTipIndex = 0;
+        inputDom.oninput = function (e) { //oninput无法获得键值
+            reSet();  //当输入改变时重置选中项为第0个
+            addToEmailSugWapper(); // 获取用户输入，生成提示框中的提示内容，将提示内容添加到email-sug-wrapper中
+            showAndHide();  // 控制email - sug - wrapper的显示 / 隐藏状态
+        }
+        inputDom.onkeydown = function (e) { //通过改变nowSelectTipIndex的值来改变当前选中的li
+            if (e.keyCode == 38 || e.keyCode == 40 || e.keyCode == 13) {
+                if (emailSugWrapper.style.display == "block") {  //判断提示框是否存在
+                    li[nowSelectTipIndex].style.backgroundColor = null;
+                    if (e.keyCode == 38) { //按的是上键
+                        if (nowSelectTipIndex != 0) {
+                            nowSelectTipIndex--;
+                        } else {
+                            nowSelectTipIndex = getLi().length - 1;
+                        }
+                        inputDom.focus();
+                    }
+                    if (e.keyCode == 40) { //按的是下键
+                        if (nowSelectTipIndex != (getLi().length - 1)) {
+                            nowSelectTipIndex++;
+                        } else {
+                            nowSelectTipIndex = 0;
+                        }
+                    }
+                    if (getLi().length > 0) {
+                        li[nowSelectTipIndex].style.backgroundColor = "#fdaeae";
+                    }
+                    if (e.keyCode == 13) { //按的是enter
+                        inputDom.value = HTMLDecode(li[nowSelectTipIndex].innerHTML);
+                        sugHidden();
+                    }
+                }
+            }
+            // console.log(e.keyCode);
+            if (e.keyCode == 27) {
+                inputDom.select();
+            }
+        }
+        function reSet() {  //重置nowSelectTipIndex
+            nowSelectTipIndex = 0;
         }
 
         function get() {                                            //获取用户输入
-            var trim = document.getElementById("text").value;       //拿到input输入框的输入内容trim后返回   
-            return trim; 
+            var input = inputDom.value.trim();       //拿到input输入框的输入内容trim后返回   
+            return input; 
         }
 
         function tip() {                                            //生成提示框中的提示内容
-            var trip = get();//获取用户输入
-            var tipValue;
-            for(var index in postfixList) {                         //遍历postfixList
-                tipValue = tt + postfixList[index] +"\n"+ tipValue;      //把用户输入和每一个postfix进行结合成为每一个Li
+            var input = get();//获取用户输入
+            var org;
+            if (input.indexOf("@") >= 0) {
+                var index = input.indexOf("@");
+                org = input.slice(index + 1);
+                input = input.slice(0, index);
             }
-            return tipValue; //返回生成的提示内容
+            var list = [];
+            var liorg = [];
+            for (var i = 0; i < postfixList.length; i++) {               //遍历postfixList
+                var li = document.createElement("li");
+                li.innerHTML = HTMLEncode(input + "@" + postfixList[i]); 
+                list.push(li);
+                if (postfixList[i].indexOf(org) >= 0) {  
+                    liorg.push(li);
+                }      
+            }
+            if (liorg.length > 0) {  //判断是否存在后缀匹配的li
+                return liorg;
+            }
+            return list; //返回生成的提示内容
         }
 
-        function  add(){                                                         //将提示内容添加到email-sug-wrapper中()
-            var tipValue=tip();
-            document.getElementById("email-sug-wrapper").innerHTML = tipValue    //将内容添加到email-sug-wrapper中
+        function addToEmailSugWapper() { //将提示内容添加到email-sug-wrapper中
+            document.getElementById('email-sug-wrapper').innerHTML = "";
+            var list = tip();                            //获取生成提示框中的提示内容
+            for (var i = 0; i < list.length; i++) {        //将内容添加到email - sug - wrapper中
+                document.getElementById('email-sug-wrapper').appendChild(list[i]);
+            }
+            if (list.length) {  //判断提示框内容是否为空
+                // li[nowSelectTipIndex].setAttribute("style", "background-color:#fdaeae"); //通过设置属性，将第nowSelectTipIndex个Li的样式设置为被选样式
+                li[nowSelectTipIndex].style.backgroundColor = "#fdaeae"; //第二种方式，将第nowSelectTipIndex个Li的样式设置为被选样式
+            }
         }
 
         function  showAndHide(){              //控制email-sug-wrapper的显示/隐藏状态()
-            var trip = get();
-            if (trip = "") {
+            if (get() && get().indexOf("@") != 0) {
                 document.getElementById('email-sug-wrapper').style.display = 'none'; //隐藏提示框
             } else {
                 document.getElementById('email-sug-wrapper').style.display = 'block'; //显示提示框
             }
         }
-
-        function 隐藏提示框() {
-            做具体隐藏提示框的操作
+        function HTMLEncode(html) {
+            var temp = document.createElement("div");
+            (temp.textContent != null) ? (temp.textContent = html) : (temp.innerText = html);
+            var output = temp.innerHTML;
+            temp = null;
+            return output;
         }
-
-        function 显示提示框() {
-            做具体显示提示框的操作
+        //反转 解码
+        function HTMLDecode(text) {
+            var temp = document.createElement("div");
+            temp.innerHTML = text;
+            var output = temp.innerText || temp.textContent;
+            temp = null;
+            return output;
+        }
+        //当监听到用户点击某一个提示的Li后，把Li对应的提示内容，放在输入框中，同时隐藏提示框
+        document.getElementById('email-sug-wrapper').onclick = function (e) { //事件委托
+            inputDom.value = HTMLDecode(e.target.innerHTML);
+            inputDom.focus();
+            document.getElementById('email-sug-wrapper').style.display = 'none';
         }
     </script>
 </body>
